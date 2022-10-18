@@ -37,7 +37,7 @@ public class Main extends ListenerAdapter {
                 file.createNewFile();
                 return;
             }
-            jda = JDABuilder.createDefault(new String(Files.readAllBytes(file.toPath())))
+            jda = JDABuilder.createDefault(new String(Files.readAllBytes(file.toPath())).trim())
                     .build()
                     .awaitReady();
             System.out.println("Bot is ready");
@@ -60,7 +60,7 @@ public class Main extends ListenerAdapter {
         System.out.println("Message event: " + event.getClass().getSimpleName());
         event.getChannel().retrieveMessageById(event.getMessageId()).queue(message -> {
             System.out.println("Message: " + message.getContentRaw());
-            if (userIds.contains(message.getAuthor().getId())) {
+            if (userIds.contains(message.getAuthor().getId()) || message.getContentDisplay().contains("chinay")) {
                 System.out.println("User is in list");
                 message.addReaction(Emoji.fromUnicode("\uD83C\uDF53")).queue();
             }
@@ -71,7 +71,7 @@ public class Main extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent event) {
         System.out.println("Message received: " + event.getMessage().getContentRaw());
         Message message = event.getMessage();
-        if (userIds.contains(message.getAuthor().getId())) {
+        if (userIds.contains(message.getAuthor().getId()) || message.getContentDisplay().contains("chinay")) {
             System.out.println("User is in list");
             message.addReaction(Emoji.fromUnicode("\uD83C\uDF53")).queue();
         }
