@@ -23,7 +23,7 @@ import java.util.List;
 public class Main extends ListenerAdapter {
     private static JDA jda;
     private static final List<String> userIds = Arrays.asList(
-            "969935460363292702"
+            "969935460363292702", "456951144166457345"
     );
 
     public static void main(String[] args) {
@@ -64,7 +64,7 @@ public class Main extends ListenerAdapter {
                 System.out.println("User is in list");
                 message.addReaction(Emoji.fromUnicode("\uD83C\uDF53")).queue();
             }
-        });
+        }, e ->{}); // ignore errors
     }
 
     @Override
@@ -81,18 +81,18 @@ public class Main extends ListenerAdapter {
     public void onMessageReactionRemove(MessageReactionRemoveEvent event) {
         // prevent users from removing the reaction
         event.retrieveMessage().queue(message -> {
-            if (userIds.contains(message.getAuthor().getId())) {
+            if (userIds.contains(message.getAuthor().getId()) || message.getContentDisplay().contains("chinay")) {
                 message.addReaction(Emoji.fromUnicode("\uD83C\uDF53")).queue();
             }
-        });
+        },e ->{});
     }
 
     @Override
     public void onMessageReactionRemoveAll(MessageReactionRemoveAllEvent event) {
         event.getGuildChannel().retrieveMessageById(event.getMessageId()).queue(message -> {
-            if (userIds.contains(message.getAuthor().getId())) {
+            if (userIds.contains(message.getAuthor().getId()) || message.getContentDisplay().contains("chinay")) {
                 message.addReaction(Emoji.fromUnicode("\uD83C\uDF53")).queue();
             }
-        });
+        }, e -> {});
     }
 }
